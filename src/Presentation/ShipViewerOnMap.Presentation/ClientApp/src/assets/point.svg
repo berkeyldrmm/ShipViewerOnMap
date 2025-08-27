@@ -1,0 +1,14 @@
+<svg class="marker" width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <circle cx="15" cy="15" r="5">
+    <animate 
+      attributeName="r" 
+      values="5;7;5" 
+      dur="1s" 
+      repeatCount="indefinite" />
+    <animate 
+      attributeName="opacity" 
+      values="1;0.5;1" 
+      dur="1s" 
+      repeatCount="indefinite" />
+  </circle>
+</svg>

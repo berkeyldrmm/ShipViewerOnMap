@@ -1,0 +1,18 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/lib/fontawesome-iconpicker/",
+      "files": [
+        "js/fontawesome-iconpicker.min.js",
+        "css/fontawesome-iconpicker.min.css"
+      ]
+    },
+    {
+      "library": "bootstrap-datetimepicker@6.7.13",
+      "destination": "wwwroot/lib/bootstrap-datetimepicker/"
+    }
+  ]
+}

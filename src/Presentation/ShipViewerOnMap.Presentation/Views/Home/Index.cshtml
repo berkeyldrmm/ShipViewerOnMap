@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Map";
+    var contentRootPath = System.IO.Directory.GetCurrentDirectory();
+    var jsFiles = System.IO.Directory.GetFiles(System.IO.Path.Combine(contentRootPath, "wwwroot", "ol-dist", "assets"), "index-*.js");
+
+}
+
+<div id="map" class="map"></div>
+
+<div style="position: absolute; right:5%; bottom:5%;">
+    <button type="button" class="btn btn-primary btn-lg" id="loadDataButton">
+        Load Ship Data
+    </button>
+</div>
+
+<div id="notification-panel">
+    <h3>Notification Panel</h3>
+    <button type="button" class="collapsible bg-danger" id="collision-risk-button">Collision Risks (İstanbul Bosphorus)<i class="fa-solid fa-angle-down" style="margin-left: 3px;"></i></button>
+    <div class="content">
+        <ul class="notification-list" id="notification-list-collision">
+        </ul>
+    </div>
+    <button type="button" class="collapsible bg-primary" id="smuggling-risk-button">Smuggling Risk (Aegean Sea)<i class="fa-solid fa-angle-down" style="margin-left: 41px;"></i></button>
+    <div class="content">
+        <ul class="notification-list" id="notification-list-smuggling"></ul>
+    </div>
+    <button type="button" class="collapsible bg-warning" id="smuggling-risk-button2">Smuggling Risk (Black Sea)<i class="fa-solid fa-angle-down" style="margin-left: 56px;"></i></button>
+    <div class="content">
+        <ul class="notification-list" id="notification-list-smuggling2"></ul>
+    </div>
+  
+</div>
+
+<div id="popup" class="ol-popup"></div>
+
+<div class="modal" id="loadDataModal" role="dialog">
+    <div class="modal-dialog" role="document" style="height: 400px;width: 75%;position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Load Ship Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body w-75 mx-auto">
+                <p>How many ship data do you want to load?</p>
+                <input type="number" class="mx-auto" name="count" />
+            </div>
+            <div class="modal-footer">
+                <div id="pre-loader" style="width:25px; margin-left:8px;display:none">
+                    <img width="25px" src="~/loading-img/loading.gif" />
+                </div>
+                <button type="submit" class="btn btn-primary" id="sendLoadRequest">Load Data</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#loadDataButton").on("click", () => {
+        $("#loadDataModal").modal("show");
+    });
+
+    $("#sendLoadRequest").on("click", () => {
+        $("#pre-loader").css("display", "block");
+
+        var count = $("input[name='count']").val();
+        fetch(`/api/ship/create?count=${count}`, {
+            method: "POST"
+        }).then(res => res.json()).then(data => {
+            if (data.success) {
+                alert("Ship data loaded successfully!");
+                $("#loadDataModal").modal("hide");
+                window.location.reload();
+            } else {
+                alert("Failed to load ship data.");
+            }
+        }).catch(err => {
+            alert(`An error occurred while loading ship data. ${err.message}`);
+        });
+    });
+
+</script>
+
+
+@section Scripts {
+    @foreach (var file in jsFiles)
+    {
+        var relativePath = file.Replace(System.IO.Path.Combine(contentRootPath, "wwwroot"), "").Replace("\\", "/");
+        <script type="module" src="@relativePath"></script>
+    }
+}
